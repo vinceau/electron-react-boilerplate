@@ -17,6 +17,8 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
+import { worker } from '../replay_indexer/replay_indexer_worker_interface';
+
 export default class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
@@ -31,6 +33,20 @@ ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
+});
+
+ipcMain.on('counter-inc', async (event) => {
+  const indexerWorker = await worker;
+  const res = await indexerWorker.increment();
+  console.log(`main received counter inc. new value: ${res}`);
+  event.reply('counter-changed', res);
+});
+
+ipcMain.on('counter-dec', async (event) => {
+  const indexerWorker = await worker;
+  const res = await indexerWorker.decrement();
+  console.log(`main received counter dec. new value: ${res}`);
+  event.reply('counter-changed', res);
 });
 
 if (process.env.NODE_ENV === 'production') {

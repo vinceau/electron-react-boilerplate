@@ -4,13 +4,27 @@ import icon from '../../assets/icon.svg';
 import './App.global.scss';
 
 const Hello = () => {
+  const [counter, setCounter] = React.useState(0);
   React.useEffect(() => {
+    window.electron.ipcRenderer.on('counter-changed', (val: number) => {
+      console.log(`received counter changed event from main. value: ${val}`);
+      setCounter(val);
+    });
+
     window.electron.ipcRenderer.on('ipc-example', (arg: any) => {
       console.log(arg);
     });
   });
 
   const onPingClick = () => window.electron.ipcRenderer.myPing();
+  const incrementCounter = () => {
+    console.log('inc counter button pressed');
+    window.electron.ipcRenderer.incCounter();
+  };
+  const decrementCounter = () => {
+    console.log('dec counter button pressed');
+    window.electron.ipcRenderer.decCounter();
+  };
 
   return (
     <div>
@@ -22,19 +36,14 @@ const Hello = () => {
         <button type="button" onClick={onPingClick}>
           Ping IPC
         </button>
-        <a
-          href="https://github.com/sponsors/electron-react-boilerplate"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              🙏
-            </span>
-            Donate
-          </button>
-        </a>
       </div>
+      <h1>Counter: {counter}</h1>
+      <button type="button" onClick={incrementCounter}>
+        inc
+      </button>
+      <button type="button" onClick={decrementCounter}>
+        dec
+      </button>
     </div>
   );
 };
