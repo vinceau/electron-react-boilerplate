@@ -14,6 +14,12 @@ const Hello = () => {
     window.electron.ipcRenderer.on('ipc-example', (arg: any) => {
       console.log(arg);
     });
+
+    return () => {
+      // Clean up listeners on unmount
+      window.electron.ipcRenderer.removeAllListeners('counter-changed');
+      window.electron.ipcRenderer.removeAllListeners('ipc-example');
+    };
   });
 
   const onPingClick = () => window.electron.ipcRenderer.myPing();

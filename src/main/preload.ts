@@ -19,6 +19,11 @@ const api = {
         ipcRenderer.once(channel, (_event, ...args) => func(...args));
       }
     },
+    removeAllListeners(channel: string) {
+      if (validChannels.includes(channel)) {
+        ipcRenderer.removeAllListeners(channel);
+      }
+    },
     incCounter() {
       console.log("sending 'counter-inc' message to main");
       ipcRenderer.send('counter-inc');
