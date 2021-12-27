@@ -31,6 +31,7 @@ const configuration: webpack.Configuration = {
 
   entry: {
     main: path.join(webpackPaths.srcMainPath, 'main.ts'),
+    counter_worker: path.join(webpackPaths.srcPath, 'counter', 'counter_worker.ts'),
   },
 
   output: {
