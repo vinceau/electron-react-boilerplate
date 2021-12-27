@@ -13,6 +13,8 @@
     "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts",
     "postinstall": "yarn run electron-rebuild && yarn run link-modules"
   },
-  "dependencies": {},
+  "dependencies": {
+    "threads": "^1.6.5"
+  },
   "license": "MIT"
 }
