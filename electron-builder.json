@@ -2,7 +2,10 @@
   "productName": "ElectronReact",
   "appId": "org.erb.ElectronReact",
   "asar": true,
-  "asarUnpack": "**\\*.{node,dll}",
+  "asarUnpack": [
+    "**\\*.{node,dll}",
+    "**\\*_worker.js"
+  ],
   "files": [
     "dist",
     "node_modules",

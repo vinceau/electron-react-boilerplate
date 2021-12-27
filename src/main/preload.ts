@@ -2,7 +2,7 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels = 'ipc-example';
+export type Channels = 'ipc-example' | 'counter-changed';
 
 const electronHandler = {
   ipcRenderer: {
@@ -20,6 +20,17 @@ const electronHandler = {
     },
     once(channel: Channels, func: (...args: unknown[]) => void) {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
+    },
+    removeAllListeners(channel: Channels) {
+      ipcRenderer.removeAllListeners(channel);
+    },
+    incCounter() {
+      console.log("sending 'counter-inc' message to main");
+      ipcRenderer.send('counter-inc');
+    },
+    decCounter() {
+      console.log("sending 'counter-dec' message to main");
+      ipcRenderer.send('counter-dec');
     },
   },
 };
