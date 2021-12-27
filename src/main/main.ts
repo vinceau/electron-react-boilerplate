@@ -17,7 +17,7 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
-import { worker } from '../replay_indexer/replay_indexer_worker_interface';
+import { worker } from '../counter/counter_worker_interface';
 
 export default class AppUpdater {
   constructor() {
@@ -36,15 +36,15 @@ ipcMain.on('ipc-example', async (event, arg) => {
 });
 
 ipcMain.on('counter-inc', async (event) => {
-  const indexerWorker = await worker;
-  const res = await indexerWorker.increment();
+  const counterWorker = await worker;
+  const res = await counterWorker.increment();
   console.log(`main received counter inc. new value: ${res}`);
   event.reply('counter-changed', res);
 });
 
 ipcMain.on('counter-dec', async (event) => {
-  const indexerWorker = await worker;
-  const res = await indexerWorker.decrement();
+  const counterWorker = await worker;
+  const res = await counterWorker.decrement();
   console.log(`main received counter dec. new value: ${res}`);
   event.reply('counter-changed', res);
 });

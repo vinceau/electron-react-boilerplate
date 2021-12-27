@@ -2,16 +2,16 @@ import { app } from 'electron';
 import electronLog from 'electron-log';
 import { spawn, Thread, Worker } from 'threads';
 
-import { Methods as WorkerMethods, WorkerSpec } from './replay_indexer_worker';
+import type { Methods as WorkerMethods, WorkerSpec } from './counter_worker';
 
-const log = electronLog.scope('replay_indexer');
+const log = electronLog.scope('counter');
 
 // eslint-disable-next-line import/prefer-default-export
 export const worker: Promise<Thread & WorkerMethods> = new Promise(
   (resolve, reject) => {
     log.debug('Spawning worker');
 
-    spawn<WorkerSpec>(new Worker('./replay_indexer_worker'), {
+    spawn<WorkerSpec>(new Worker('./counter_worker'), {
       timeout: 30000,
     })
       // eslint-disable-next-line promise/always-return
@@ -29,8 +29,8 @@ export const worker: Promise<Thread & WorkerMethods> = new Promise(
 
         app.on('quit', terminateWorker);
 
-        // Thread.events(worker).subscribe((evt) => {
-        //   log.debug("replayBrowser: Worker event:", evt);
+        // Thread.events(_worker).subscribe((evt) => {
+        //   log.debug("Worker event:", evt);
         //   // TODO: Respawn on worker exit?
         // });
 

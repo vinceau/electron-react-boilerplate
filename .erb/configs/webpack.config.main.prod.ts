@@ -31,7 +31,7 @@ const configuration: webpack.Configuration = {
 
   entry: {
     main: path.join(webpackPaths.srcMainPath, 'main.ts'),
-    replay_indexer_worker: path.join(webpackPaths.srcPath, 'replay_indexer', 'replay_indexer_worker.ts'),
+    counter_worker: path.join(webpackPaths.srcPath, 'counter', 'counter_worker.ts'),
   },
 
   output: {
