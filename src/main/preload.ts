@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
-contextBridge.exposeInMainWorld('electron', {
+const api = {
   ipcRenderer: {
     myPing() {
       ipcRenderer.send('ipc-example', 'ping');
@@ -20,4 +20,8 @@ contextBridge.exposeInMainWorld('electron', {
       }
     },
   },
-});
+};
+
+contextBridge.exposeInMainWorld('electron', api);
+
+export type API = typeof api;
