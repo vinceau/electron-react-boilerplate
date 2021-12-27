@@ -6,14 +6,11 @@ import path from 'path';
 import webpack from 'webpack';
 import { merge } from 'webpack-merge';
 import TerserPlugin from 'terser-webpack-plugin';
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
-import checkNodeEnv from '../scripts/check-node-env';
-import deleteSourceMaps from '../scripts/delete-source-maps';
 
-checkNodeEnv('production');
-deleteSourceMaps();
+
+const isDevelop = process.env.NODE_ENV === 'development';
 
 const devtoolsConfig =
   process.env.DEBUG_PROD === 'true'
@@ -25,16 +22,16 @@ const devtoolsConfig =
 const configuration: webpack.Configuration = {
   ...devtoolsConfig,
 
-  mode: 'production',
+  mode: isDevelop ? 'development' : 'production',
 
-  target: 'electron-main',
+  target: 'electron-preload',
 
   entry: {
-    main: path.join(webpackPaths.srcMainPath, 'main.ts'),
+    preload: path.join(webpackPaths.srcMainPath, 'preload.ts'),
   },
 
   output: {
-    path: webpackPaths.distMainPath,
+    path: isDevelop ? webpackPaths.srcMainPath : webpackPaths.distMainPath,
     filename: '[name].js',
   },
 
@@ -47,10 +44,6 @@ const configuration: webpack.Configuration = {
   },
 
   plugins: [
-    new BundleAnalyzerPlugin({
-      analyzerMode: process.env.ANALYZE === 'true' ? 'server' : 'disabled',
-    }),
-
     /**
      * Create global constants which can be configured at compile time.
      *
@@ -61,7 +54,7 @@ const configuration: webpack.Configuration = {
      * development checks
      */
     new webpack.EnvironmentPlugin({
-      NODE_ENV: 'production',
+      NODE_ENV: isDevelop ? 'development' : 'production',
       DEBUG_PROD: false,
       START_MINIMIZED: false,
     }),
