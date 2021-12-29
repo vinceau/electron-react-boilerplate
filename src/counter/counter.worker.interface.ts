@@ -2,7 +2,7 @@ import { app } from 'electron';
 import electronLog from 'electron-log';
 import { spawn, Thread, Worker } from 'threads';
 
-import type { Methods as WorkerMethods, WorkerSpec } from './counter_worker';
+import type { Methods as WorkerMethods, WorkerSpec } from './counter.worker';
 
 const log = electronLog.scope('counter');
 
@@ -11,7 +11,7 @@ export const worker: Promise<Thread & WorkerMethods> = new Promise(
   (resolve, reject) => {
     log.debug('Spawning worker');
 
-    spawn<WorkerSpec>(new Worker('./counter_worker'), {
+    spawn<WorkerSpec>(new Worker('./counter.worker'), {
       timeout: 30000,
     })
       // eslint-disable-next-line promise/always-return
