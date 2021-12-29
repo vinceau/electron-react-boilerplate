@@ -15,7 +15,7 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
-import { worker } from '../counter/counter_worker_interface';
+import { worker } from '../counter/counter.worker.interface';
 
 class AppUpdater {
   constructor() {

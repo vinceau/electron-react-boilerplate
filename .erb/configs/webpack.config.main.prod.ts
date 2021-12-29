@@ -25,10 +25,10 @@ const configuration: webpack.Configuration = {
   entry: {
     main: path.join(webpackPaths.srcMainPath, 'main.ts'),
     preload: path.join(webpackPaths.srcMainPath, 'preload.ts'),
-    counter_worker: path.join(
+    'counter.worker': path.join(
       webpackPaths.srcPath,
       'counter',
-      'counter_worker.ts'
+      'counter.worker.ts'
     ),
   },
 
