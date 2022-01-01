@@ -1,4 +1,6 @@
-import { contextBridge, ipcRenderer } from 'electron';
+import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+
+type IpcEventListener = (event: IpcRendererEvent, ...args: any[]) => void;
 
 const validChannels = ['ipc-example', 'counter-changed'];
 
@@ -10,18 +12,19 @@ const api = {
     on(channel: string, func: any) {
       if (validChannels.includes(channel)) {
         // Deliberately strip event as it includes `sender`
-        ipcRenderer.on(channel, (_event, ...args) => func(...args));
+        const subscription: IpcEventListener = (_event, ...args) =>
+          func(...args);
+        ipcRenderer.on(channel, subscription);
+        return () => {
+          ipcRenderer.removeListener(channel, subscription);
+        };
       }
+      return () => {};
     },
     once(channel: string, func: any) {
       if (validChannels.includes(channel)) {
         // Deliberately strip event as it includes `sender`
         ipcRenderer.once(channel, (_event, ...args) => func(...args));
-      }
-    },
-    removeAllListeners(channel: string) {
-      if (validChannels.includes(channel)) {
-        ipcRenderer.removeAllListeners(channel);
       }
     },
     incCounter() {
