@@ -16,8 +16,9 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import installCounter from '../counter/install';
 
-import { worker } from '../counter/counter.worker.interface';
+installCounter();
 
 export default class AppUpdater {
   constructor() {
@@ -33,20 +34,6 @@ ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
-});
-
-ipcMain.on('counter-inc', async (event) => {
-  const counterWorker = await worker;
-  const res = await counterWorker.increment();
-  console.log(`main received counter inc. new value: ${res}`);
-  event.reply('counter-changed', res);
-});
-
-ipcMain.on('counter-dec', async (event) => {
-  const counterWorker = await worker;
-  const res = await counterWorker.decrement();
-  console.log(`main received counter dec. new value: ${res}`);
-  event.reply('counter-changed', res);
 });
 
 if (process.env.NODE_ENV === 'production') {
