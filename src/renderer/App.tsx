@@ -5,21 +5,18 @@ import './App.global.scss';
 
 function Hello() {
   const [counter, setCounter] = React.useState(0);
+
   React.useEffect(() => {
-    window.electron.ipcRenderer.on('counter-changed', (val: unknown) => {
+    return window.electron.ipcRenderer.on('counter-changed', (val: unknown) => {
       console.log(`received counter changed event from main. value: ${val}`);
       setCounter(val as number);
     });
+  });
 
-    window.electron.ipcRenderer.on('ipc-example', (arg: any) => {
+  React.useEffect(() => {
+    return window.electron.ipcRenderer.on('ipc-example', (arg: any) => {
       console.log(arg);
     });
-
-    return () => {
-      // Clean up listeners on unmount
-      window.electron.ipcRenderer.removeAllListeners('counter-changed');
-      window.electron.ipcRenderer.removeAllListeners('ipc-example');
-    };
   });
 
   const onPingClick = () => window.electron.ipcRenderer.sendMessage('ipc-example', ['ping']);
