@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import webpack from 'webpack';
+import webpack, { WebpackOptionsNormalized } from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import chalk from 'chalk';
 import { merge } from 'webpack-merge';
@@ -37,7 +37,7 @@ if (
   execSync('npm run postinstall');
 }
 
-const configuration: webpack.Configuration = {
+const configuration: webpack.Configuration & Pick<WebpackOptionsNormalized, 'devServer'> = {
   devtool: 'inline-source-map',
 
   mode: 'development',
