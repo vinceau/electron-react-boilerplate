@@ -1,18 +1,24 @@
-import { ipcMain } from 'electron';
 import { worker } from './counter.worker.interface';
+import {
+  ipc_counterUpdated,
+  ipc_decrementCounter,
+  ipc_incrementCounter,
+} from './endpoints';
 
 export default function installCounter() {
-  ipcMain.on('counter-inc', async (event) => {
+  ipc_incrementCounter.main!.handle(async () => {
     const counterWorker = await worker;
     const res = await counterWorker.increment();
     console.log(`main received counter inc. new value: ${res}`);
-    event.reply('counter-changed', res);
+    ipc_counterUpdated.main!.trigger({ value: res });
+    return { success: true };
   });
 
-  ipcMain.on('counter-dec', async (event) => {
+  ipc_decrementCounter.main!.handle(async () => {
     const counterWorker = await worker;
     const res = await counterWorker.decrement();
     console.log(`main received counter dec. new value: ${res}`);
-    event.reply('counter-changed', res);
+    ipc_counterUpdated.main!.trigger({ value: res });
+    return { success: true };
   });
 }
