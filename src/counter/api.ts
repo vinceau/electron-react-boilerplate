@@ -1,27 +1,24 @@
-import { ipcRenderer, IpcRendererEvent } from 'electron';
-
-type Channels = 'counter-changed';
-
-function addChannelSubscription(channel: Channels, func: any) {
-  const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>
-    func(...args);
-  ipcRenderer.on(channel, subscription);
-
-  return () => {
-    ipcRenderer.removeListener(channel, subscription);
-  };
-}
+import {
+  ipc_counterUpdated,
+  ipc_decrementCounter,
+  ipc_incrementCounter,
+} from './endpoints';
 
 export default {
   onCounterChange(handle: (val: number) => void) {
-    return addChannelSubscription('counter-changed', handle);
+    const { destroy } = ipc_counterUpdated.renderer!.handle(
+      async ({ value }) => {
+        handle(value);
+      }
+    );
+    return destroy;
   },
   incrementCounter() {
     console.log("sending 'counter-inc' message to main");
-    ipcRenderer.send('counter-inc');
+    ipc_incrementCounter.renderer!.trigger({});
   },
   decrementCounter() {
     console.log("sending 'counter-dec' message to main");
-    ipcRenderer.send('counter-dec');
+    ipc_decrementCounter.renderer!.trigger({});
   },
 };
