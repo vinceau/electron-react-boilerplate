@@ -7,7 +7,7 @@ function Hello() {
   const [counter, setCounter] = React.useState(0);
 
   React.useEffect(() => {
-    return window.electron.ipcRenderer.on('counter-changed', (val: unknown) => {
+    return window.electron.counter.onCounterChange((val: number) => {
       console.log(`received counter changed event from main. value: ${val}`);
       setCounter(val as number);
     });
@@ -22,11 +22,11 @@ function Hello() {
   const onPingClick = () => window.electron.ipcRenderer.sendMessage('ipc-example', ['ping']);
   const incrementCounter = () => {
     console.log('inc counter button pressed');
-    window.electron.ipcRenderer.incCounter();
+    window.electron.counter.incrementCounter();
   };
   const decrementCounter = () => {
     console.log('dec counter button pressed');
-    window.electron.ipcRenderer.decCounter();
+    window.electron.counter.decrementCounter();
   };
 
   return (
