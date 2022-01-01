@@ -1,10 +1,12 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+import counter from '../counter/api';
 
 type IpcEventListener = (event: IpcRendererEvent, ...args: any[]) => void;
 
 const validChannels = ['ipc-example', 'counter-changed'];
 
 const api = {
+  counter,
   ipcRenderer: {
     myPing() {
       ipcRenderer.send('ipc-example', 'ping');
@@ -26,14 +28,6 @@ const api = {
         // Deliberately strip event as it includes `sender`
         ipcRenderer.once(channel, (_event, ...args) => func(...args));
       }
-    },
-    incCounter() {
-      console.log("sending 'counter-inc' message to main");
-      ipcRenderer.send('counter-inc');
-    },
-    decCounter() {
-      console.log("sending 'counter-dec' message to main");
-      ipcRenderer.send('counter-dec');
     },
   },
 };
