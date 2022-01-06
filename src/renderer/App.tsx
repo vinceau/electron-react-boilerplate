@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import icon from '../../assets/icon.svg';
+import icon, { ReactComponent as LogoIcon } from '../../assets/icon.svg';
 import './App.global.scss';
 
 const Hello = () => {
@@ -33,6 +33,7 @@ const Hello = () => {
     <div>
       <div className="Hello">
         <img width="200px" alt="icon" src={icon} />
+        <LogoIcon />
       </div>
       <h1>Hello world!</h1>
       <div className="Hello">
