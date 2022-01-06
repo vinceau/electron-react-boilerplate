@@ -89,9 +89,14 @@ const configuration: webpack.Configuration = {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: 'asset/resource',
       },
+      // Allow direct importing of SVGs
+      {
+          test: /\.svg$/,
+          use: ["@svgr/webpack", "url-loader"],
+      },
       // Images
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /\.(png|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
       },
     ],
