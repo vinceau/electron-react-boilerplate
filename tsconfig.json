@@ -18,5 +18,9 @@
     "allowJs": true,
     "outDir": ".erb/dll"
   },
+  "ts-node": {
+    "transpileOnly": true,
+    "require": ["tsconfig-paths/register"]
+  },
   "exclude": ["test", "release/build", "release/app/dist", ".erb/dll"]
 }
