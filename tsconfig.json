@@ -3,6 +3,9 @@
     "target": "es2021",
     "module": "commonjs",
     "lib": ["dom", "esnext"],
+    "paths": {
+      "@counter/*": ["counter/*"]
+    },
     "declaration": true,
     "declarationMap": true,
     "jsx": "react-jsx",
