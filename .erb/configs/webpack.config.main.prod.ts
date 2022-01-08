@@ -2,6 +2,7 @@
  * Webpack config for production electron main process
  */
 
+import { fdir } from 'fdir';
 import path from 'path';
 import webpack from 'webpack';
 import { merge } from 'webpack-merge';
@@ -15,6 +16,18 @@ import deleteSourceMaps from '../scripts/delete-source-maps';
 checkNodeEnv('production');
 deleteSourceMaps();
 
+function resolveWorkers(rootFolder: string): Record<string, string> {
+  const workers: Record<string, string> = {};
+  // eslint-disable-next-line new-cap
+  const crawler = new fdir().glob('./**/*.worker.ts').withFullPaths();
+  const files = crawler.crawl(rootFolder).sync() as string[];
+  files.forEach((filename) => {
+    const basename = path.basename(filename, '.ts');
+    workers[basename] = filename;
+  });
+  return workers;
+}
+
 const configuration: webpack.Configuration = {
   devtool: 'source-map',
 
@@ -25,11 +38,7 @@ const configuration: webpack.Configuration = {
   entry: {
     main: path.join(webpackPaths.srcMainPath, 'main.ts'),
     preload: path.join(webpackPaths.srcMainPath, 'preload.ts'),
-    'counter.worker': path.join(
-      webpackPaths.srcPath,
-      'counter',
-      'counter.worker.ts'
-    ),
+    ...resolveWorkers(webpackPaths.srcPath),
   },
 
   output: {
