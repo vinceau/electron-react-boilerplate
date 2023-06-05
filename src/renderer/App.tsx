@@ -19,7 +19,8 @@ function Hello() {
     });
   });
 
-  const onPingClick = () => window.electron.ipcRenderer.sendMessage('ipc-example', ['ping']);
+  const onPingClick = () =>
+    window.electron.ipcRenderer.sendMessage('ipc-example', ['ping']);
   const incrementCounter = () => {
     console.log('inc counter button pressed');
     window.electron.counter.incrementCounter();
