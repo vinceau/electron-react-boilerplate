@@ -40,29 +40,7 @@ const endpointsRegistered: {
 } = {
   browser: [],
   renderer: [],
-};
-
-type EndpointMaker = {
-  /**
-   * Creates a “main endpoint”,
-   * which must have one (!) handler in the main thread, and which can be invoked from renderer threads
-   * (e.g., in response to user actions or GUI state change).
-   */
-  main: <I extends Payload, O extends Payload>(
-    name: string,
-    requestPayload: I,
-    responsePayload: O
-  ) => MainEndpoint<I, O>;
-
-  /**
-   * Creates a “renderer endpoint”,
-   * which can have many handlers across renderers, and which can be invoked the from main thread
-   * (e.g., to notify the GUI about some change in data).
-   */
-  renderer: <I extends Payload>(
-    name: string,
-    payload: I
-  ) => RendererEndpoint<I>;
+  utility: [],
 };
 
 export type EmptyPayload = Record<never, never>;
@@ -151,6 +129,29 @@ type RendererEndpoint<I extends Payload> =
  * Approach suggested by https://medium.com/@nandiinbao/partial-type-argument-inference-in-typescript-and-workarounds-for-it-d7c772788b2e
  */
 export const _ = <unknown>null;
+
+type EndpointMaker = {
+  /**
+   * Creates a “main endpoint”,
+   * which must have one (!) handler in the main thread, and which can be invoked from renderer threads
+   * (e.g., in response to user actions or GUI state change).
+   */
+  main: <I extends Payload, O extends Payload>(
+    name: string,
+    requestPayload: I,
+    responsePayload: O
+  ) => MainEndpoint<I, O>;
+
+  /**
+   * Creates a “renderer endpoint”,
+   * which can have many handlers across renderers, and which can be invoked the from main thread
+   * (e.g., to notify the GUI about some change in data).
+   */
+  renderer: <I extends Payload>(
+    name: string,
+    payload: I
+  ) => RendererEndpoint<I>;
+};
 
 /**
  * Factory functions for creating _endpoints_
