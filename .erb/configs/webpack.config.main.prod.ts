@@ -77,10 +77,6 @@ const configuration: webpack.Configuration = {
       DEBUG_PROD: false,
       START_MINIMIZED: false,
     }),
-
-    new webpack.DefinePlugin({
-      'process.type': '"browser"',
-    }),
   ],
 
   /**

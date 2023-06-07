@@ -10,15 +10,13 @@
  * License: MIT
  */
 
-import crypto from 'crypto';
 import { BrowserWindow, ipcMain, ipcRenderer } from 'electron';
 import type { IpcRendererEvent, IpcMainInvokeEvent } from 'electron';
-import electronLog from 'electron-log';
 
-const log = electronLog.scope('ipc');
+const log = console;
 
 function hash(val: string): string {
-  return crypto.createHash('sha1').update(val).digest('hex');
+  return Buffer.from(val).toString('base64');
 }
 
 function toJSONPreservingUndefined(data: any) {
