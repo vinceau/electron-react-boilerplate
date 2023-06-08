@@ -1,4 +1,4 @@
-import type { ElectronHandler } from "../../src/main/preload";
+import type { ElectronHandler } from '../../src/main/preload';
 
 const electronHandler: ElectronHandler = {
   counter: {
